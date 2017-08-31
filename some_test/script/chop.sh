@@ -1,0 +1,1 @@
+mkdir out/F3; for f in F3/*.mp3; do ffmpeg -ss 27 -i "$f" -acodec copy "out/$f"; done
