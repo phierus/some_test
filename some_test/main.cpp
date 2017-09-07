@@ -2,6 +2,8 @@
 #include <sstream>
 #include <iomanip>
 #include <windows.h>
+#include <ctime>
+#include <stdlib.h>
 
 #ifdef _MSC_VER  
 //#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )  
@@ -195,14 +197,25 @@ void PrintSchedule() {
 
     std::cout << std::endl;
 
+    std::tm start_tm = { 0 };
+    std::istringstream start_tm_str("2017 8 28");
+    start_tm_str >> std::get_time(&start_tm, "%Y %m %d");
+
     for (int i = 1; i < finish_days; i++) {
+
         std::ostringstream os;
+        os << std::put_time(&start_tm, "%m/%d") << "_";
         os << "Day_" << std::to_string(i) << ":   ";
+
         std::cout << std::setiosflags(std::ios::left);
-        std::cout << " " << std::setw(10) << os.str();
+        std::cout << " " << std::setw(16) << os.str();
         for (int j = 0; j < repeat_count; j++) {
             std::cout << std::setw(48) << get_task_name(i, repeat_date[j], task_count);
         }
+
+        start_tm.tm_mday += 1;
+        std::mktime(&start_tm);
+
         std::cout << std::endl;
     }
 
@@ -290,11 +303,26 @@ void PrintSR() {
     }
 }
 
+
+void PrintTime() {
+
+    std::tm start_tm = { 0 };
+    std::istringstream start_tm_str("2017 8 28");
+    start_tm_str >> std::get_time(&start_tm, "%Y %m %d");
+
+    for (int i = 0; i < 100; i++) {
+        std::cout << std::put_time(&start_tm, "%c") << std::endl;
+        start_tm.tm_mday += 1;
+        std::mktime(&start_tm);
+    }
+}
+
 int APIENTRY wWinMain(
     HINSTANCE, HINSTANCE, wchar_t*, int) {
 
     std::cout << std::endl;
 
+    //PrintTime();
     //PrintSR();
     //PrintTask();
     PrintSchedule();
